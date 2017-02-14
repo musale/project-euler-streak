@@ -69,13 +69,13 @@ def create_counter_commit(count):
     os.system("yes|git add -p counter.txt")
 
     # create commit for new problem file
-    commit_message = "Euler Problem {0} file added\n" + \
-        "- This is the first commit for the number {1} problem".format(
-            count, count,)
+    commit_message = "Euler Problem {0} file added\n - This is the first commit for the number {1} problem".format(
+        count, count)
 
     # commit the counter.txt file
     os.system("git commit -m 'Set up problem {0}'".format(count,))
     return commit_message
+
 
 def printer(message):
     print message
