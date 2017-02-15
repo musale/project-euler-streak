@@ -102,13 +102,7 @@ def main():
     # get the last commit
     last_tree_sha = get_last_commit(LAST_COMMIT)
 
-    if len(counter_value) == 0:
-        # nothing has been written to counter.
-        # will probably run just once
-        # write to it 001
-        create_counter_commit("001", last_commit_sha, last_tree_sha)
-    else:
-        create_counter_commit(counter_value, last_commit_sha, last_tree_sha)
+    create_counter_commit(counter_value, last_commit_sha, last_tree_sha)
 
 
 def create_counter_commit(current, last_commit_sha, last_tree_sha):
@@ -122,7 +116,7 @@ def create_counter_commit(current, last_commit_sha, last_tree_sha):
     file_content = open("counter.txt", "r")
     content = file_content.read()
 
-    commit_message = "Set up new problem {0}".format(new_count,)
+    commit_message = "Set up new problem {0}".format(current,)
     new_content_tree_sha = create_tree_obj(
         last_tree_sha, "counter.txt", content)
 
@@ -143,8 +137,8 @@ def create_counter_commit(current, last_commit_sha, last_tree_sha):
         GITHUB_USERNAME, GITHUB_REPO, last_commit_sha)
     # get the last commit
     last_tree_sha = get_last_commit(LAST_COMMIT)
-    os.system("yes|euler {0}".format(new_count))
-    create_problem_file_commit(new_count, last_commit_sha, last_tree_sha)
+    os.system("yes|euler {0}".format(current))
+    create_problem_file_commit(current, last_commit_sha, last_tree_sha)
 
 
 def create_problem_file_commit(current, last_commit_sha, last_tree_sha):
