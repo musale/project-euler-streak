@@ -12,7 +12,7 @@ import requests
 dotenv_path = join(dirname("__file__"), '.env')
 dotenv.read_dotenv(dotenv_path)
 GITHUB_USERNAME = os.environ.get("GITHUB_USERNAME")
-GITHUB_REPO = os.environ.get("GITHUB_REPO")
+GITHUB_REPO = 'euler-problems-python'
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
 
 HEADERS = {
