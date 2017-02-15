@@ -48,7 +48,7 @@ def get_last_commit(LAST_COMMIT_URL):
     return last_tree_sha
 
 
-def create_tree_obj(base_tree, path):
+def create_tree_obj(base_tree, path, content):
     """Create tree object (also implicitly creates a blob based on content)."""
     print "3. Creating a new tree object"
     payload = {
@@ -58,7 +58,7 @@ def create_tree_obj(base_tree, path):
                 "path": path,
                 "mode": "100644",
                 "type": "blob",
-                "content": base_tree
+                "content": content
             }
         ]
     }
@@ -119,8 +119,12 @@ def create_counter_commit(current, last_commit_sha, last_tree_sha):
     counter.write(new_count)
     counter.close()
 
+    file_content = open("counter.txt", "r")
+    content = file_content.read()
+
     commit_message = "Set up new problem {0}".format(new_count,)
-    new_content_tree_sha = create_tree_obj(last_tree_sha, "counter.txt")
+    new_content_tree_sha = create_tree_obj(
+        last_tree_sha, "counter.txt", content)
 
     new_commit_sha = create_commit(
         last_commit_sha, new_content_tree_sha, commit_message)
@@ -144,6 +148,7 @@ def create_counter_commit(current, last_commit_sha, last_tree_sha):
         create_problem_file_commit(new_count, last_commit_sha, last_tree_sha)
     else:
         os.system("yes|euler {0}".format(new_count))
+        os.system("git add {0}.py".format(new_count))
         create_problem_file_commit(new_count, last_commit_sha, last_tree_sha)
 
 
@@ -152,8 +157,9 @@ def create_problem_file_commit(current, last_commit_sha, last_tree_sha):
     # create commit for new problem file
     commit_message = "Euler Problem {0} file added\n - This is the first commit for the number {1} problem".format(
         current, current)
+    content = open("{0}.py".format(current), "r").read()
     new_content_tree_sha = create_tree_obj(
-        last_tree_sha, "{0}.py".format(current))
+        last_tree_sha, "{0}.py".format(current), content)
 
     new_commit_sha = create_commit(
         last_commit_sha, new_content_tree_sha, commit_message)
