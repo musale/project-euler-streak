@@ -143,13 +143,8 @@ def create_counter_commit(current, last_commit_sha, last_tree_sha):
         GITHUB_USERNAME, GITHUB_REPO, last_commit_sha)
     # get the last commit
     last_tree_sha = get_last_commit(LAST_COMMIT)
-    if current == '001':
-        os.system("yes|euler")
-        create_problem_file_commit(new_count, last_commit_sha, last_tree_sha)
-    else:
-        os.system("yes|euler {0}".format(new_count))
-        os.system("git add {0}.py".format(new_count))
-        create_problem_file_commit(new_count, last_commit_sha, last_tree_sha)
+    os.system("yes|euler {0}".format(new_count))
+    create_problem_file_commit(new_count, last_commit_sha, last_tree_sha)
 
 
 def create_problem_file_commit(current, last_commit_sha, last_tree_sha):
@@ -165,7 +160,7 @@ def create_problem_file_commit(current, last_commit_sha, last_tree_sha):
         last_commit_sha, new_content_tree_sha, commit_message)
 
     update_branch(new_commit_sha)
-    print "DONE!"
+    cleanup_repo(current)
 
 
 def get_new_count(current):
@@ -176,6 +171,14 @@ def get_new_count(current):
         new_count = "00{0}".format(str(int(current) + 1))
     print "New count is {0}".format(new_count,)
     return new_count
+
+
+def cleanup_repo(files):
+    """Clean up. Remove the created py file and commit counter.txt file."""
+    os.system("rm {0}.py".format(files))
+    os.system("git add .")
+    os.system("git commit -m 'clean up {0}'".format(files))
+    print "DONE!"
 
 
 if __name__ == "__main__":
